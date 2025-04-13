@@ -1,0 +1,25 @@
+import numpy as np
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+from sklearn.metrics import silhouette_score
+
+file_path = input("Path to dataset file: ")
+
+data = np.loadtxt(file_path, delimiter=' ')
+data = data.reshape(-1, 2)  # Convert data into a 2D array. We can use -1 because we don't need to specify an exact number for both dimensions.
+
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data)
+
+## DBSCAN Clustering
+# We create an instance of the KMeans class, fit out data into this model, and finally predict the labels of each data point based on this model.
+dbscan = DBSCAN(eps=0.357, min_samples=5)
+labels_db = dbscan.fit_predict(data_scaled)
+
+plt.scatter(data[:, 0], data[:, 1], c=labels_db, marker='o')
+plt.title('DBSCAN Clustering')
+plt.show() 
+
+score = silhouette_score(data, labels_db)
+print("DBSCAN Clustering Silhouette Score:", score)
